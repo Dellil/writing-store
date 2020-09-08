@@ -1,3 +1,3 @@
-My Document Store
+## Writing Store
 
-I'm writing down what I've something I learned and interested
+writing down what I've something that got learned and interested
