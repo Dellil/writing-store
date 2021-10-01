@@ -1,3 +1,5 @@
+# Item 1 ~ 5
+
 - 타입 시스템의 목표: 런타임 오류발생코드 미리 찾아내기
 - `noImplicitAny` , `strictNullchecks` , `strict` 설정 꼭 하기
 - 타입 연산은 런타임에 영향 안 줌 (동작방식을 보면 당연한걸..)
