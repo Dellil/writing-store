@@ -49,3 +49,57 @@ Variable Environment와 Lexical Environment의 내부는 **environment Record**�
 - JS 엔진이 실제로 끌어올리지는 않고 끌어 올린걸로 '간주하자'는 의미
     - 왜? ⇒ 코드가 실행되기 전인데 JS 엔진은 해당환경에 속한 코드의 변수명을 다 알고 있음(Lexical Environment의 environment Record에 수집됨)
     - 이미 다 알고 있다면 JS엔진은 식별자를 최상단으로 끌어올린담에 코드를 실행한다! 라고 생각해도 상관없기 때문
+
+### 호이스팅 예제
+
+```jsx
+function a() {
+	console.log(b);    // (1)
+	var b = 'bbb';     // 수집 대상 1(변수 선언)
+	console.log(b);    // (2)
+	function b() {}    // 수집 대상 2(함수 선언)
+	console.log(b);    // (3)
+}
+
+a();
+```
+
+위와 같은 코드를 호이스팅 개념을 적용해 바꿔보자
+
+```jsx
+function a() {
+    var b;
+    var b = function b() {} // <-- 바뀐 부분
+    
+    console.log(b);     // (1)
+    var b = 'bbb';
+    console.log(b);     // (2)
+    console.log(b);     // (3)
+}
+
+// console.log의 결과는 차례대로 함수, 'bbb', 'bbb'가 나온다.
+```
+변수는 선언부를 끌어 올리고, 함수 선언은 전체를 끌어올리기때문에 위 코드처럼 바뀌었다.
+
+**짧게 짚고 넘어가기 - 함수 선언문과 함수 표현식**
+1. 함수 선언문
+    1. function 정의부만 존재하고 별도 할당 명령이 없음
+2. 함수 표현식
+    1. function을 별도의 변수에 할당하는걸 말함
+    2. **함수명**이 있는 함수 표현식을 **기명 함수 표현식**, 아닌 것을 **익명 함수 표현식**이라 부른다.
+    3. **보통** 함수 표현식이라 함은 **익명 함수 표현식**을 말한다.
+
+```jsx
+console.log(sum(1,2));
+console.log(multiply(3,4));
+
+// 함수 선언문
+function sum(a, b) {
+    return a + b;
+}
+
+// 함수 표현식
+var multiply = function(a, b) {
+    return a * b;
+}
+```
