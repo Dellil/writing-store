@@ -103,3 +103,18 @@ var multiply = function(a, b) {
     return a * b;
 }
 ```
+```jsx
+// 호이스팅이 적용된 코드
+var sum = function sum(a, b) {
+	return a + b;
+}
+var multiply;
+console.log(sum(1, 2));
+console.log(multiply(3, 4));
+
+multiply = function(a, b) { // 변수 할당부는 원래 자리에 남김
+	return a * b;
+}
+
+// 결과: multiply is not a function Error
+```
