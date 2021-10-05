@@ -118,3 +118,53 @@ multiply = function(a, b) { // 변수 할당부는 원래 자리에 남김
 
 // 결과: multiply is not a function Error
 ```
+---
+
+# Scope
+
+- 스코프
+    
+    식별자의 유효범위
+    
+    es5 이전까지의 스코프는 오직 함수에 의해서만 생성됐다.
+    
+
+## Scope Chain
+
+스코프를 안에서 바깥으로 검색해나가는 것
+
+**LexicalEnvironment**의 **outerEnvironmentReference**가 가능케한다.
+
+### How to work?
+
+outerEnvironmentReference는 호출된 함수의 ***선언될 당시***의 **LexicalEnvironment**를 참조하기 때문이다.
+
+따라서 **무조건 스코프 체인상에서 가장 먼저 발견된 식별자에만 접근 가능**하게 된다. *(outerEnvironmentReference는 연결 리스트 형태를 띄게 된다!)*
+
+```jsx
+var a = 1;
+var outer = function() {
+	var inner = function() {
+		console.log(a);
+		var a = 3;
+	}
+	inner();
+	console.log(a);
+}
+outer();
+console.log(a);
+```
+
+코드 실행 동작 과정
+
+1. 전역컨텍스트가 활성화된다. 전역컨텍스트의 *environmentRecord*에는 a와 outer 식별자가 저장된다.
+2. a에는 1, outer에는 함수를 할당한다.
+3. outer함수를 호출하면서 outer실행컨텍스트가 활성화된다.
+4. outer 실행컨텍스트의 *environmentRecord*에는 inner 식별자가 저장된다. outer의 *outerEnvironmentReference*에는 outer함수가 선언될 당시의 **전역 LexicalEnvironment가 담긴다.**
+5. outer에 있는 변수 inner에게 함수를 할당한다.
+6. inner를 호출한다.
+7. inner 실행컨텍스트의 *environmentRecord*에는 a식별자가 저장된다. inner의 *outerEnvironmentReference*에는 **outer함수의 LexicalEnvironment가 담긴다.**
+8. inner함수안에서는 `console.log(a)` 로 식별자 a에 접근하려하지만 a에는 아무 값이 할당되있지 않아 `undefined` 를 출력한 다음, a에게 3을 할당하게 되면서 inner함수 실행이 종료된다.
+9. 다시 outer 실행컨텍스트가 활성화되면서 `console.log(a)` 로 a에 접근을 시도한다. outer실행컨텍스트의 *LexicalEnvironment*의 *environmentRecord*에는 a가 없으므로, outer의 *outerEnvironmentReference*에 있는 *environmentRecord*로 넘어가서 a를 찾는다. 이때 outer 실행컨텍스트의 *outerEnvironmentReference*는 전역 컨텍스트가 되고, 전역 컨텍스트의 *environmentRecord*에는 a가 있으므로 a의 값을 반환하게 된다. 그러므로 `1`이 출력된다.
+10. outer 함수의 실행이 끝나고 전역 컨텍스트가 다시 활성화되면서 `console.log(a)` 를 실행하려 한다.
+11. 전역 컨텍스트의 *environmentRecord* 에는 a가 있으므로 a의 값을 반환한다. 그러므로 `1` 이 출력된다.
