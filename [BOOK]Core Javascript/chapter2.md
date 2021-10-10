@@ -168,3 +168,7 @@ console.log(a);
 9. 다시 outer 실행컨텍스트가 활성화되면서 `console.log(a)` 로 a에 접근을 시도한다. outer실행컨텍스트의 *LexicalEnvironment*의 *environmentRecord*에는 a가 없으므로, outer의 *outerEnvironmentReference*에 있는 *environmentRecord*로 넘어가서 a를 찾는다. 이때 outer 실행컨텍스트의 *outerEnvironmentReference*는 전역 컨텍스트가 되고, 전역 컨텍스트의 *environmentRecord*에는 a가 있으므로 a의 값을 반환하게 된다. 그러므로 `1`이 출력된다.
 10. outer 함수의 실행이 끝나고 전역 컨텍스트가 다시 활성화되면서 `console.log(a)` 를 실행하려 한다.
 11. 전역 컨텍스트의 *environmentRecord* 에는 a가 있으므로 a의 값을 반환한다. 그러므로 `1` 이 출력된다.
+
+- 현재 컨텍스트내에서 내가 찾고자 하는 변수가 없을 경우 *outerEnvironmentReference*를 통해 변수를 찾을텐데 그러면 이론상 전역 컨텍스트까지 훑게 될 수 있지 않나?
+    
+    예를 들어 위의 코드와 똑같이 되어 있고 inner 함수 내부에서 a에 접근하려 하면 inner의 LexicalEnvironment에 있는 a를 줄 수 밖에 없다. 그래서 스코프 체인 검색을 하지 않고 inner의 LexicalEnvironment상의 a를 반환한다. 즉, inner 함수에서 a를 선언했기때문에 전역의 a 변수에는 접근 할 수 없다. 이를 ***변수 은닉화(variable shadowing)*** 라고 부른다
